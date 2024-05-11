@@ -104,7 +104,7 @@ public:
 
         for (size_t i = 0; i < 9; i++)
         {
-            temp_field[i] = pfield[i];
+            temp_field[i] = this->pfield[i];
         }
         ///////////////////////////////
         for (int x = 0; x < 3; ++x)
@@ -114,6 +114,17 @@ public:
             }
         }
         ///////////////////////////////
+        
+        for (int i : temp_field) {
+            if (i == 0) {
+                this->gameOver = false;
+            }
+            else {
+                this->gameOver = true;
+                this->who_won = 3;
+            }
+        }
+
         for (int i = 0; i < 3; i++)
         {
             if ((temp_matrix[i][0] == Player && temp_matrix[i][1] == Player && temp_matrix[i][2] == Player) ||
@@ -133,17 +144,6 @@ public:
                     this->gameOver = true;  
                     who_won = 2;
                  }
-        }
-        bool exists = false;
-        for (int i : temp_field) {
-            if (i == 0) {
-                this->gameOver = false;
-                break;
-            }
-            else {
-                this->gameOver = true;
-                this->who_won = 3;
-            }
         }
     }
 
@@ -173,22 +173,18 @@ public:
         }
     }
 
-private:
-    
+private: 
     int field[9]{0,0,0,0,0,0,0,0,0};
     int* pfield = field;
-
-    int best_move_analizer[9]{ 1,0,1,0,2,0,1,0,1 };
-
-    bool move_rigth;
-
     int position = 0;
-
+    int best_move_analizer[9]{ 1,0,1,0,2,0,1,0,1 };
+    
     int Player = 0;
     int Bot;
-    int who_won;
 
+    int who_won;
     bool gameOver = false;
+    bool move_rigth;
 };
 
 int main()
