@@ -10,38 +10,50 @@ public:
     krestici_noliki(bool first_move) {
         this->move_rigth = first_move;
         if (first_move) {
-            Player = 1;
-            Bot = 2;
+            this->Player = 1;
+            this->Bot = 2;
         }
         else {
-            Player = 2;
-            Bot = 1;
+            this->Player = 2;
+            this->Bot = 1;
         }
     }
 
     void player_move() {
-        while (move_rigth) {
+        while (this->move_rigth) {
             cin >> position;
-            if (pfield[position] == 0) {
-                pfield[position] = Player;
-                move_rigth = false;
+            if (this->pfield[position] == 0) {
+                this->pfield[position] = this->Player;
+                this->move_rigth = false;
                 break;
             }
             else {
                 cout << "pole_zanayto";
-                move_rigth = true;
+                this->move_rigth = true;
                 break;
             }
         }
     }
     
     void output() {
+
+        cout << "place your sign" << endl;
+        cout << "0 - left_up" << endl;
+        cout << "1 - center_up" << endl;
+        cout << "2 - right_up" << endl;
+        cout << "3 - left_middle" << endl;
+        cout << "4 - center_middle" << endl;
+        cout << "5 - right_middle" << endl;
+        cout << "6 - left_bottom" << endl;
+        cout << "7 - center_bottom" << endl;
+        cout << "8 - right_bottom" << endl;
+
         int temp_field[9];
         string str_field;
 
         for (size_t i = 0; i < 9; i++)
         {
-            temp_field[i] = pfield[i];
+            temp_field[i] = this->pfield[i];
         }
 
         for (size_t i = 0; i < 9; i++)
@@ -67,15 +79,15 @@ public:
             
             srand((unsigned)time(0));
             int ran = (rand() % 9);
-            position = ran;
-            if (pfield[position] == 0) {
-                pfield[position] = Bot;
-                move_rigth = true;
+            this->position = ran;
+            if (this->pfield[position] == 0) {
+                this->pfield[position] = Bot;
+                this->move_rigth = true;
                 break;
             }
             else {
                 cout << "pole_zanayto";
-                move_rigth = false;
+                this->move_rigth = false;
                 break;
             }
         }
@@ -110,7 +122,7 @@ public:
                 (temp_matrix[2][2] == Player && temp_matrix[1][1] == Player && temp_matrix[0][0] == Player))
                 {
                     this->gameOver = true;
-                    cout << "You won";
+                    who_won = 1;
                 }
             else if
                 ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
@@ -118,33 +130,46 @@ public:
                 (temp_matrix[0][0] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][2] == Bot) ||
                 (temp_matrix[2][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[0][0] == Bot)) 
                  {
-                    this->gameOver = true;
-                    cout << "You lost";
+                    this->gameOver = true;  
+                    who_won = 2;
                  }
+        }
+        bool exists = false;
+        for (int i : temp_field) {
+            if (i == 0) {
+                this->gameOver = false;
+                break;
+            }
+            else {
+                this->gameOver = true;
+                this->who_won = 3;
+            }
         }
     }
 
     void game() {
-        while (!gameOver) {
-
-            cout << "place your sign" << endl;
-            cout << "0 - left_up" << endl;
-            cout << "1 - center_up" << endl;
-            cout << "2 - right_up" << endl;
-            cout << "3 - left_middle" << endl;
-            cout << "4 - center_middle" << endl;
-            cout << "5 - right_middle" << endl;
-            cout << "6 - left_bottom" << endl;
-            cout << "7 - center_bottom" << endl;
-            cout << "8 - right_bottom" << endl;
-
-            player_move();
-            game_over_checker();
+        while (!this->gameOver) {  
             output();
+            if (this->move_rigth) {
+                player_move();
+            }
+            else {
+                bot_move();
+            }
+            game_over_checker();
             system("cls");
-            bot_move();
-            game_over_checker();
-            output();
+        }
+        output();
+        switch (this->who_won) {
+        case 1:
+            cout << "You won";
+            break;
+        case 2:
+            cout << "You lost";
+            break;
+        case 3:
+            cout << "Draw";
+            break;
         }
     }
 
@@ -161,6 +186,7 @@ private:
 
     int Player = 0;
     int Bot;
+    int who_won;
 
     bool gameOver = false;
 };
