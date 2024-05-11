@@ -11,22 +11,12 @@ public:
         this->move_rigth = first_move;
         if (first_move) {
             Player = 1;
+            Bot = 2;
         }
         else {
             Player = 2;
+            Bot = 1;
         }
-        
-        cout << "place your sign";
-        cout << "0 - left_up" << endl;
-        cout << "1 - center_up" << endl;
-        cout << "2 - right_up" << endl;
-        cout << "3 - left_middle" << endl;
-        cout << "4 - center_middle" << endl;
-        cout << "5 - right_middle" << endl;
-        cout << "6 - left_bottom" << endl;
-        cout << "7 - center_bottom" << endl;
-        cout << "8 - right_bottom" << endl;
-
     }
 
     void player_move() {
@@ -72,12 +62,7 @@ public:
     }
 
     void bot_move() {
-        if (Player == 1) {
-            Bot = 2;
-        }
-        else {
-            Bot = 1;
-        }
+        
         while (!move_rigth) {
             
             srand((unsigned)time(0));
@@ -119,26 +104,47 @@ public:
         ///////////////////////////////
         for (int i = 0; i < 3; i++)
         {
-
-            if ((temp_matrix[i][0] == temp_matrix[i][1] == temp_matrix[i][2])||
-                (temp_matrix[0][i] == temp_matrix[1][i] == temp_matrix[2][i])||
-                (temp_matrix[0][0] && temp_matrix[1][1] && temp_matrix[2][2])||
-                (temp_matrix[2][2] && temp_matrix[1][1] && temp_matrix[0][0]))
-            {
-                    
-
-            } 
+            if ((temp_matrix[i][0] == Player && temp_matrix[i][1] == Player && temp_matrix[i][2] == Player) ||
+                (temp_matrix[0][i] == Player && temp_matrix[1][i] == Player && temp_matrix[2][i] == Player) ||
+                (temp_matrix[0][0] == Player && temp_matrix[1][1] == Player && temp_matrix[2][2] == Player) ||
+                (temp_matrix[2][2] == Player && temp_matrix[1][1] == Player && temp_matrix[0][0] == Player))
+                {
+                    this->gameOver = true;
+                    cout << "You won";
+                }
+            else if
+                ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
+                (temp_matrix[0][i] == Bot && temp_matrix[1][i] == Bot && temp_matrix[2][i] == Bot) ||
+                (temp_matrix[0][0] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][2] == Bot) ||
+                (temp_matrix[2][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[0][0] == Bot)) 
+                 {
+                    this->gameOver = true;
+                    cout << "You lost";
+                 }
         }
     }
 
     void game() {
         while (!gameOver) {
+
+            cout << "place your sign" << endl;
+            cout << "0 - left_up" << endl;
+            cout << "1 - center_up" << endl;
+            cout << "2 - right_up" << endl;
+            cout << "3 - left_middle" << endl;
+            cout << "4 - center_middle" << endl;
+            cout << "5 - right_middle" << endl;
+            cout << "6 - left_bottom" << endl;
+            cout << "7 - center_bottom" << endl;
+            cout << "8 - right_bottom" << endl;
+
             player_move();
+            game_over_checker();
             output();
             system("cls");
             bot_move();
-            output();
             game_over_checker();
+            output();
         }
     }
 
