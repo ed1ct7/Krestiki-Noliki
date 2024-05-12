@@ -22,15 +22,24 @@ public:
     void player_move() {
         while (this->move_rigth) {
             cin >> position;
-            if (this->pfield[position] == 0) {
+            if (position > 8 || position < 0) {
+                cout << "ne_dostupno" << endl;
+                this->move_rigth = true;
+                continue;
+            }
+            else if (this->pfield[position] == 0) {
                 this->pfield[position] = this->Player;
                 this->move_rigth = false;
-                break;
+
+                this->best_move_analizer[position] = -1;
+
+                this->best_move = -1;
+                continue;
             }
             else {
-                cout << "pole_zanayto";
+                cout << "pole_zanayto" << endl;
                 this->move_rigth = true;
-                break;
+                continue;
             }
         }
     }
@@ -73,28 +82,26 @@ public:
             cout << " | " << str_field[6] << " | " << str_field[7] << " | " << str_field[8] << " | " << endl;
     }
 
-    void bot_move() {
-        
-        while (!move_rigth) {
-            
-            srand((unsigned)time(0));
-            int ran = (rand() % 9);
-            this->position = ran;
-            if (this->pfield[position] == 0) {
-                this->pfield[position] = Bot;
-                this->move_rigth = true;
-                break;
-            }
-            else {
-                cout << "pole_zanayto";
-                this->move_rigth = false;
-                break;
+    void bot_analizer() {
+        for (int i = 0; i < 9; ++i) {
+            if (this->best_move_analizer[i] > this->best_move) {
+                this->best_move = this->best_move_analizer[i];
+                best_move_position = i;
             }
         }
     }
 
-    void bot_analizer() {
-
+    void bot_move() {
+            if (!this->move_rigth) {
+                this->pfield[best_move_position] = Bot;
+                this->best_move_analizer[best_move_position] = -1;
+                best_move_position = 0;
+                this->best_move = -1;
+                this->move_rigth = true;
+            }
+            else {
+                this->move_rigth = false;
+            }
     }
 
     void game_over_checker() {
@@ -114,23 +121,23 @@ public:
             }
         }
         ///////////////////////////////
-        
+        int zero_count = 0;
         for (int i : temp_field) {
             if (i == 0) {
-                this->gameOver = false;
-            }
-            else {
-                this->gameOver = true;
-                this->who_won = 3;
+                zero_count++;
             }
         }
-
+        if (zero_count == 0) {
+            gameOver = true;
+            this->who_won = 3;
+        }
+        ///////////////////////////////
         for (int i = 0; i < 3; i++)
         {
             if ((temp_matrix[i][0] == Player && temp_matrix[i][1] == Player && temp_matrix[i][2] == Player) ||
                 (temp_matrix[0][i] == Player && temp_matrix[1][i] == Player && temp_matrix[2][i] == Player) ||
                 (temp_matrix[0][0] == Player && temp_matrix[1][1] == Player && temp_matrix[2][2] == Player) ||
-                (temp_matrix[2][2] == Player && temp_matrix[1][1] == Player && temp_matrix[0][0] == Player))
+                (temp_matrix[0][2] == Player && temp_matrix[1][1] == Player && temp_matrix[2][0] == Player))
                 {
                     this->gameOver = true;
                     who_won = 1;
@@ -139,7 +146,7 @@ public:
                 ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
                 (temp_matrix[0][i] == Bot && temp_matrix[1][i] == Bot && temp_matrix[2][i] == Bot) ||
                 (temp_matrix[0][0] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][2] == Bot) ||
-                (temp_matrix[2][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[0][0] == Bot)) 
+                (temp_matrix[0][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][0] == Bot)) 
                  {
                     this->gameOver = true;  
                     who_won = 2;
@@ -148,12 +155,13 @@ public:
     }
 
     void game() {
-        while (!this->gameOver) {  
+        while(!this->gameOver) {  
             output();
             if (this->move_rigth) {
                 player_move();
             }
             else {
+                bot_analizer();
                 bot_move();
             }
             game_over_checker();
@@ -177,12 +185,14 @@ private:
     int field[9]{0,0,0,0,0,0,0,0,0};
     int* pfield = field;
     int position = 0;
+    int best_move = 0;
+    int best_move_position=4;
     int best_move_analizer[9]{ 1,0,1,0,2,0,1,0,1 };
     
     int Player = 0;
     int Bot;
 
-    int who_won;
+    int who_won = 0;
     bool gameOver = false;
     bool move_rigth;
 };
