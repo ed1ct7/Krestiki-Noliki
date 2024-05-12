@@ -1,7 +1,5 @@
 ﻿#include <iostream>
-#include <string>
-#include "windows.h"
-#include <ctime> 
+#include <string>  
 
 using namespace std;
 
@@ -12,6 +10,7 @@ public:
         if (first_move) {
             this->Player = 1;
             this->Bot = 2;
+            this->best_move_analizer[4] = 3;
         }
         else {
             this->Player = 2;
@@ -185,9 +184,10 @@ private:
     int field[9]{0,0,0,0,0,0,0,0,0};
     int* pfield = field;
     int position = 0;
+
     int best_move = 0;
     int best_move_position=4;
-    int best_move_analizer[9]{ 1,0,1,0,2,0,1,0,1 };
+    int best_move_analizer[9]{ 2,0,2,0,1,0,2,0,2 };
     
     int Player = 0;
     int Bot;
