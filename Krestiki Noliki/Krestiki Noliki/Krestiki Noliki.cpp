@@ -56,23 +56,17 @@ public:
         cout << "7 - center_bottom" << endl;
         cout << "8 - right_bottom" << endl;
 
-        int temp_field[9];
         string str_field;
 
         for (size_t i = 0; i < 9; i++)
         {
-            temp_field[i] = this->pfield[i];
-        }
-
-        for (size_t i = 0; i < 9; i++)
-        {
-            if (temp_field[i] == 1) {
+            if (this->pfield[i] == 1) {
                 str_field += 'X';
             }
-            if (temp_field[i] == 2) {
+            if (this->pfield[i] == 2) {
                 str_field += 'O';
             }
-            if (temp_field[i] == 0) {
+            if (this->pfield[i] == 0) {
                 str_field += ' ';
             }
         }
@@ -86,6 +80,26 @@ public:
             if (this->best_move_analizer[i] > this->best_move) {
                 this->best_move = this->best_move_analizer[i];
                 best_move_position = i;
+            }
+        }
+        int temp_matrix[3][3];
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        for (int x = 0; x < 3; ++x)
+        {
+            for (int k = 0; k < 3; ++k) {
+                temp_matrix[x][k] = this->pfield[3 * x + k];
+            }
+        };;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        int strochka = 0;
+        int Ostrochka = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; i++)
+            {
+                if (temp_matrix[0][j] == this->Player)
+                {
+                    strochka++;
+                }
             }
         }
     }
@@ -104,24 +118,19 @@ public:
     }
 
     void game_over_checker() {
-        
-        int temp_field[9];
+
         int temp_matrix[3][3];
 
-        for (size_t i = 0; i < 9; i++)
-        {
-            temp_field[i] = this->pfield[i];
-        }
         ///////////////////////////////
         for (int x = 0; x < 3; ++x)
         {
             for (int k = 0; k < 3; ++k) {
-                temp_matrix[x][k] = temp_field[3 * x + k];
+                temp_matrix[x][k] = this->pfield[3 * x + k];
             }
         }
         ///////////////////////////////
         int zero_count = 0;
-        for (int i : temp_field) {
+        for (int i : this->pfield) {
             if (i == 0) {
                 zero_count++;
             }
@@ -137,12 +146,12 @@ public:
                 (temp_matrix[0][i] == Player && temp_matrix[1][i] == Player && temp_matrix[2][i] == Player) ||
                 (temp_matrix[0][0] == Player && temp_matrix[1][1] == Player && temp_matrix[2][2] == Player) ||
                 (temp_matrix[0][2] == Player && temp_matrix[1][1] == Player && temp_matrix[2][0] == Player))
-                {
+                 {
                     this->gameOver = true;
                     who_won = 1;
-                }
+                 }
             else if
-                ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
+               ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
                 (temp_matrix[0][i] == Bot && temp_matrix[1][i] == Bot && temp_matrix[2][i] == Bot) ||
                 (temp_matrix[0][0] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][2] == Bot) ||
                 (temp_matrix[0][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][0] == Bot)) 
@@ -156,11 +165,11 @@ public:
     void game() {
         while(!this->gameOver) {  
             output();
+            bot_analizer();
             if (this->move_rigth) {
                 player_move();
             }
             else {
-                bot_analizer();
                 bot_move();
             }
             game_over_checker();
@@ -181,8 +190,7 @@ public:
     }
 
 private: 
-    int field[9]{0,0,0,0,0,0,0,0,0};
-    int* pfield = field;
+    int pfield[9]{ 0,0,0,0,0,0,0,0,0 };
     int position = 0;
 
     int best_move = 0;
