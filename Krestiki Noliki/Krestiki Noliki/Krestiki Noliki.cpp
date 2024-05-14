@@ -3,6 +3,31 @@
 
 using namespace std;
 
+int arr_symbols_count(int begin, int end, int arr[], int symbol, int* loc, int modifier) {
+    int symbol_count = 0;
+    for (size_t i = begin; i < end; i++)
+    {
+        if (arr[i + modifier] == symbol)
+        {
+            symbol_count++;
+            *loc = i;
+        }
+    }
+    return symbol_count;
+}
+
+int arr_symbols_count(int begin, int end, int arr[], int symbol, int modifier) {
+    int symbol_count = 0;
+    for (size_t i = begin; i < end; i++)
+    {
+        if (arr[i + modifier] == symbol)
+        {
+            symbol_count++;
+        }
+    }
+    return symbol_count;
+}
+
 class krestici_noliki {
 public:
     krestici_noliki(bool first_move) {
@@ -76,30 +101,35 @@ public:
     }
 
     void bot_analizer() {
+
+        int pr = 0;
+        int zero_location = 0;
+        //////////////////////////////////////////////
+ /*       for (size_t i = 0; i < 3; i++ )
+        {
+            if (arr_symbols_count(pr, pr + 3, this->pfield, this->Player, 0) == 2 && arr_symbols_count(pr, pr + 3, this->pfield, 0, &zero_location, 0) == 1) {
+                this->best_move_analizer[zero_location] += 3;
+            }
+            pr += 3;
+        }*/
+        for (size_t i = 0; i < 3; i++)
+        {
+            if (arr_symbols_count(0, 3, this->pfield, this->Player, 3) == 2 && arr_symbols_count(0, 3, this->pfield, 0, &zero_location, 3) == 1) {
+                this->best_move_analizer[zero_location] += 3;
+            }
+        }
+        //for (size_t i = 0; i < 3; i++)
+        //{
+        //    if (arr_symbols_count(pr, 8, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0, 3, this->pfield, 0, &zero_location, 4) == 1) {
+        //        this->best_move_analizer[zero_location] += 3;
+        //    }
+        //    pr += 3;
+        //}
+        
         for (int i = 0; i < 9; ++i) {
             if (this->best_move_analizer[i] > this->best_move) {
                 this->best_move = this->best_move_analizer[i];
                 best_move_position = i;
-            }
-        }
-        int temp_matrix[3][3];
-        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        for (int x = 0; x < 3; ++x)
-        {
-            for (int k = 0; k < 3; ++k) {
-                temp_matrix[x][k] = this->pfield[3 * x + k];
-            }
-        };;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        int strochka = 0;
-        int Ostrochka = 0;
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; i++)
-            {
-                if (temp_matrix[0][j] == this->Player)
-                {
-                    strochka++;
-                }
             }
         }
     }
