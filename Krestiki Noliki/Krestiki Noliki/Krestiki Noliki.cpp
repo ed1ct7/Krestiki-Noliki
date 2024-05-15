@@ -95,25 +95,46 @@ public:
 
     void bot_analizer() {
 
-        int zero_location = 0;
+        int zero_location = 3;
+
+        ///////////////////Compl tactics/////////////////////
+        if (this->move_count == 3)
+        {
+            int nado = 0;
+            if (arr_symbols_count(6, this->pfield, this->Player, &zero_location, -2) == 2 && arr_symbols_count(6, this->pfield, 1, &nado, -2) >= 1) {
+                this->best_move_analizer[nado + 1] += 3;
+            }
+            if (arr_symbols_count(0, this->pfield, this->Player, &zero_location, 4) == 2 && arr_symbols_count(0, this->pfield, 1, &nado, 4) >= 1) {
+                this->best_move_analizer[nado + 1] += 3;
+            }
+        }
+        ///////////////////Compl tactics/////////////////////
+        
+        /////////////////////////Praym////////////////////////////////
 
         for (size_t i = 0; i < 3; i++ )
         {
             if (arr_symbols_count(i * 3, this->pfield, this->Player, &zero_location, 1) == 2 && arr_symbols_count(i * 3, this->pfield, 0, &zero_location, 1) == 1) {
-                this->best_move_analizer[zero_location] += 3;
+                this->best_move_analizer[zero_location] += 4;
             }
             else if (arr_symbols_count(i, this->pfield, this->Player, &zero_location, 3) == 2 && arr_symbols_count(i, this->pfield, 0, &zero_location, 3) == 1) {
-                this->best_move_analizer[zero_location] += 3;
+                this->best_move_analizer[zero_location] += 4;
             }
         }
 
+        /////////////////////////Praym////////////////////////////////
+        
+        ////////////////////////Uglov/////////////////////////////////
+
         if (arr_symbols_count(0, this->pfield, this->Player, &zero_location, 4) == 2 && arr_symbols_count(0, this->pfield, 0, &zero_location, 4) == 1) {
-                this->best_move_analizer[zero_location] += 3;
+                this->best_move_analizer[zero_location] += 4;
         }
         if (arr_symbols_count(6, this->pfield, this->Player, &zero_location, -2) == 2 && arr_symbols_count(6, this->pfield, 0, &zero_location, -2) == 1) {
-                this->best_move_analizer[zero_location] += 3;
+                this->best_move_analizer[zero_location] += 4;
         }
 
+        ////////////////////////Uglov/////////////////////////////////
+       
         for (int i = 0; i < 9; ++i) {
             if (this->best_move_analizer[i] > this->best_move) {
                 this->best_move = this->best_move_analizer[i];
@@ -186,9 +207,11 @@ public:
             bot_analizer();
             if (this->move_rigth) {
                 player_move();
+                this->move_count++;
             }
             else {
                 bot_move();
+                this->move_count++;
             }
             game_over_checker();
             system("cls");
@@ -221,6 +244,8 @@ private:
     int who_won = 0;
     bool gameOver = false;
     bool move_rigth;
+
+    int move_count = 0;
 };
 
 int main()
