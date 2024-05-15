@@ -3,29 +3,18 @@
 
 using namespace std;
 
-int arr_symbols_count(int begin, int end, int arr[], int symbol, int* loc, int modifier) {
+int arr_symbols_count(int begin, int arr[], int symbol, int* loc, int modifier) {
     int symbol_count = 0;
     int pupupu = begin;
-    for (size_t i = begin; i < end; i++)
+    for (size_t i = 0; i < 3; i++)
     {
         if (arr[pupupu] == symbol)
         {
             symbol_count++;
-            *loc = pupupu;
-        }
-        pupupu = pupupu + modifier;
-    }
-    return symbol_count;
-}
+            if (symbol == 0) {
+                *loc = pupupu;
+            }
 
-int arr_symbols_count(int begin, int end, int arr[], int symbol, int modifier) {
-    int symbol_count = 0;
-    int pupupu = begin;
-    for (size_t i = begin; i < end; i++)
-    {
-        if (arr[pupupu] == symbol)
-        {
-            symbol_count++;
         }
         pupupu = pupupu + modifier;
     }
@@ -110,18 +99,19 @@ public:
 
         for (size_t i = 0; i < 3; i++ )
         {
-            if (arr_symbols_count(i * 3, (i * 3)+3, this->pfield, this->Player, 1) == 2 && arr_symbols_count(i * 3, (i * 3) + 3, this->pfield, 0, &zero_location, 1) == 1) {
+            if (arr_symbols_count(i * 3, this->pfield, this->Player, &zero_location, 1) == 2 && arr_symbols_count(i * 3, this->pfield, 0, &zero_location, 1) == 1) {
                 this->best_move_analizer[zero_location] += 3;
             }
-            else if (arr_symbols_count(i, i + 3, this->pfield, this->Player, 3) == 2 && arr_symbols_count(i, i + 3, this->pfield, 0, &zero_location, 3) == 1) {
+            else if (arr_symbols_count(i, this->pfield, this->Player, &zero_location, 3) == 2 && arr_symbols_count(i, this->pfield, 0, &zero_location, 3) == 1) {
                 this->best_move_analizer[zero_location] += 3;
             }
         }
-        for (size_t i = 0; i < 2; i++)
-        {
-            if (arr_symbols_count(0, 9, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0s, 9, this->pfield, 0, &zero_location, 4) == 1) {
+
+        if (arr_symbols_count(0, this->pfield, this->Player, &zero_location, 4) == 2 && arr_symbols_count(0, this->pfield, 0, &zero_location, 4) == 1) {
                 this->best_move_analizer[zero_location] += 3;
-            }
+        }
+        if (arr_symbols_count(6, this->pfield, this->Player, &zero_location, -2) == 2 && arr_symbols_count(6, this->pfield, 0, &zero_location, -2) == 1) {
+                this->best_move_analizer[zero_location] += 3;
         }
 
         for (int i = 0; i < 9; ++i) {
