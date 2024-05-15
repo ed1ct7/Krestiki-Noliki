@@ -11,9 +11,33 @@ int arr_symbols_count(int begin, int arr[], int symbol, int* loc, int modifier) 
         if (arr[pupupu] == symbol)
         {
             symbol_count++;
-            if (symbol == 0) {
-                *loc = pupupu;
-            }
+            *loc = pupupu;
+        }
+        pupupu = pupupu + modifier;
+    }
+    return symbol_count;
+}
+
+int arr_symbols_count(int begin, int end, int arr[], int symbol) {
+    int symbol_count = 0;
+    for (size_t i = begin; i < end; i++)
+    {
+        if (arr[i] == symbol)
+        {
+            symbol_count++;
+        }
+    }
+    return symbol_count;
+}
+
+int arr_symbols_count(int begin, int arr[], int symbol, int modifier) {
+    int symbol_count = 0;
+    int pupupu = begin;
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (arr[pupupu] == symbol)
+        {
+            symbol_count++;
 
         }
         pupupu = pupupu + modifier;
@@ -95,30 +119,30 @@ public:
 
     void bot_analizer() {
 
-        int zero_location = 3;
+        int ploc = 0;
 
         ///////////////////Compl tactics/////////////////////
+
         if (this->move_count == 3)
         {
-            int nado = 0;
-            if (arr_symbols_count(6, this->pfield, this->Player, &zero_location, -2) == 2 && arr_symbols_count(6, this->pfield, 1, &nado, -2) >= 1) {
-                this->best_move_analizer[nado + 1] += 3;
+            if (arr_symbols_count(2, this->pfield, this->Player, 2) == 2 && arr_symbols_count(2, this->pfield, 1, &ploc, 2) >= 1) {
+                this->best_move_analizer[ploc + 1] += 3;
             }
-            if (arr_symbols_count(0, this->pfield, this->Player, &zero_location, 4) == 2 && arr_symbols_count(0, this->pfield, 1, &nado, 4) >= 1) {
-                this->best_move_analizer[nado + 1] += 3;
+            if (arr_symbols_count(0, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0, this->pfield, 1, &ploc, 4) >= 1) {
+                this->best_move_analizer[ploc + 1] += 3;
             }
         }
         ///////////////////Compl tactics/////////////////////
-        
+        //////////////////////////////////////////////////////////////////////////////
         /////////////////////////Praym////////////////////////////////
 
         for (size_t i = 0; i < 3; i++ )
         {
-            if (arr_symbols_count(i * 3, this->pfield, this->Player, &zero_location, 1) == 2 && arr_symbols_count(i * 3, this->pfield, 0, &zero_location, 1) == 1) {
-                this->best_move_analizer[zero_location] += 4;
+            if (arr_symbols_count(i * 3, this->pfield, this->Player, 1) == 2 && arr_symbols_count(i * 3, this->pfield, 0, &ploc, 1) == 1) {
+                this->best_move_analizer[ploc] += 4;
             }
-            else if (arr_symbols_count(i, this->pfield, this->Player, &zero_location, 3) == 2 && arr_symbols_count(i, this->pfield, 0, &zero_location, 3) == 1) {
-                this->best_move_analizer[zero_location] += 4;
+            else if (arr_symbols_count(i, this->pfield, this->Player, 3) == 2 && arr_symbols_count(i, this->pfield, 0, &ploc, 3) == 1) {
+                this->best_move_analizer[ploc] += 4;
             }
         }
 
@@ -126,15 +150,16 @@ public:
         
         ////////////////////////Uglov/////////////////////////////////
 
-        if (arr_symbols_count(0, this->pfield, this->Player, &zero_location, 4) == 2 && arr_symbols_count(0, this->pfield, 0, &zero_location, 4) == 1) {
-                this->best_move_analizer[zero_location] += 4;
+        if (arr_symbols_count(0, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0, this->pfield, 0, &ploc, 4) == 1) {
+                this->best_move_analizer[ploc] += 4;
         }
-        if (arr_symbols_count(6, this->pfield, this->Player, &zero_location, -2) == 2 && arr_symbols_count(6, this->pfield, 0, &zero_location, -2) == 1) {
-                this->best_move_analizer[zero_location] += 4;
+        if (arr_symbols_count(2, this->pfield, this->Player, 2) == 2 && arr_symbols_count(2, this->pfield, 0, &ploc, 2) == 1) {
+                this->best_move_analizer[ploc] += 4;
         }
 
         ////////////////////////Uglov/////////////////////////////////
-       
+        /////////////////////////////////////////////////////////////////////////////
+
         for (int i = 0; i < 9; ++i) {
             if (this->best_move_analizer[i] > this->best_move) {
                 this->best_move = this->best_move_analizer[i];
@@ -158,46 +183,29 @@ public:
 
     void game_over_checker() {
 
-        int temp_matrix[3][3];
-
-        ///////////////////////////////
-        for (int x = 0; x < 3; ++x)
-        {
-            for (int k = 0; k < 3; ++k) {
-                temp_matrix[x][k] = this->pfield[3 * x + k];
-            }
-        }
-        ///////////////////////////////
-        int zero_count = 0;
-        for (int i : this->pfield) {
-            if (i == 0) {
-                zero_count++;
-            }
-        }
-        if (zero_count == 0) {
+        if (arr_symbols_count(0,8, this->pfield,0) == 0) {
             gameOver = true;
             this->who_won = 3;
         }
-        ///////////////////////////////
-        for (int i = 0; i < 3; i++)
+
+        for (size_t i = 0; i < 3; i++)
         {
-            if ((temp_matrix[i][0] == Player && temp_matrix[i][1] == Player && temp_matrix[i][2] == Player) ||
-                (temp_matrix[0][i] == Player && temp_matrix[1][i] == Player && temp_matrix[2][i] == Player) ||
-                (temp_matrix[0][0] == Player && temp_matrix[1][1] == Player && temp_matrix[2][2] == Player) ||
-                (temp_matrix[0][2] == Player && temp_matrix[1][1] == Player && temp_matrix[2][0] == Player))
-                 {
-                    this->gameOver = true;
-                    who_won = 1;
-                 }
-            else if
-               ((temp_matrix[i][0] == Bot && temp_matrix[i][1] == Bot && temp_matrix[i][2] == Bot) ||
-                (temp_matrix[0][i] == Bot && temp_matrix[1][i] == Bot && temp_matrix[2][i] == Bot) ||
-                (temp_matrix[0][0] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][2] == Bot) ||
-                (temp_matrix[0][2] == Bot && temp_matrix[1][1] == Bot && temp_matrix[2][0] == Bot)) 
-                 {
-                    this->gameOver = true;  
-                    who_won = 2;
-                 }
+            if (arr_symbols_count(i * 3, this->pfield, this->Bot, 1) == 3 || arr_symbols_count(i, this->pfield, this->Bot, 3) == 3) {
+                who_won = 2;
+                gameOver = true;
+            }else if (arr_symbols_count(i * 3, this->pfield, this->Player, 1) == 3 || arr_symbols_count(i, this->pfield, this->Player, 3) == 3) {
+                who_won = 1;
+                gameOver = true;
+            }
+        }
+
+        if (arr_symbols_count(0, this->pfield, this->Bot, 4) == 3 || arr_symbols_count(2, this->pfield, this->Bot, 2) == 3) {
+            who_won = 2;
+            gameOver = true;
+        }
+        else if (arr_symbols_count(0, this->pfield, this->Player, 4) == 3 || arr_symbols_count(2, this->pfield, this->Player,  2) == 3) {
+            who_won = 1;
+            gameOver = true;
         }
     }
 
@@ -246,6 +254,7 @@ private:
     bool move_rigth;
 
     int move_count = 0;
+
 };
 
 int main()
