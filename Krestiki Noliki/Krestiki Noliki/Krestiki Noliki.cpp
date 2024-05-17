@@ -123,17 +123,7 @@ public:
 
         ///////////////////Compl tactics/////////////////////
 
-        if (this->move_count == 3)
-        {
-            if (arr_symbols_count(2, this->pfield, this->Player, 2) == 2 && arr_symbols_count(2, this->pfield, 1, &ploc, 2) >= 1) {
-                this->best_move_analizer[ploc + 1] += 3;
-            }
-            if (arr_symbols_count(0, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0, this->pfield, 1, &ploc, 4) >= 1) {
-                this->best_move_analizer[ploc + 1] += 3;
-            }
-        }
-
-        if (this->move_count == 2)
+        if (this->move_count == 2 && this->move_rigth == false)
         {
             if (arr_symbols_count(2, this->pfield, this->Bot, 2) == 1 && arr_symbols_count(2, this->pfield, 0, &ploc, 2) >= 1 && arr_symbols_count(2, this->pfield, this->Player, 2) == 1) {
                 this->best_move_analizer[ploc + 1] += 3;
@@ -141,6 +131,32 @@ public:
             if (arr_symbols_count(0, this->pfield, this->Bot, 4) == 1 && arr_symbols_count(0, this->pfield, 0, &ploc, 4) >= 1 && arr_symbols_count(0, this->pfield, this->Bot, 4) == 1) {
                 this->best_move_analizer[ploc] += 3;
             }
+            if (this->pfield[4] == 0) {
+                this->best_move_analizer[4] += 4;
+            }
+        }
+
+        if (this->move_count == 3 && this->move_rigth == false)
+        {
+            if (arr_symbols_count(2, this->pfield, this->Player, 2) == 2 && arr_symbols_count(2, this->pfield, 1, &ploc, 2) >= 1) {
+                this->best_move_analizer[1] += 2;
+            }
+            if (arr_symbols_count(0, this->pfield, this->Player, 4) == 2 && arr_symbols_count(0, this->pfield, 1, &ploc, 4) >= 1) {
+                this->best_move_analizer[1] += 2;
+            }
+        }
+
+        if (this->move_count == 4 && this->move_rigth == false)
+        {
+            for (size_t i = 0; i < 3; i++ )
+        {
+            if ((arr_symbols_count(i * 3, this->pfield, this->Bot, 1) == 1 && arr_symbols_count(i * 3, this->pfield, this->Player, 1) == 1) && arr_symbols_count(i * 3, this->pfield, 0, &ploc, 1) == 1) {
+                this->best_move_analizer[ploc] -= 2;
+            }
+            else if ((arr_symbols_count(i, this->pfield, this->Bot, 3) == 1 && arr_symbols_count(i, this->pfield, this->Player, 3) == 1) && arr_symbols_count(i, this->pfield, 0, &ploc, 3) == 1) {
+                this->best_move_analizer[ploc] -= 2;
+            }
+        }
         }
 
         ///////////////////Compl tactics/////////////////////
