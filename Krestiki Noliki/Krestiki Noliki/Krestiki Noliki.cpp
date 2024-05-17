@@ -47,7 +47,14 @@ int arr_symbols_count(int begin, int arr[], int symbol, int modifier) {
 
 class krestici_noliki {
 public:
-    krestici_noliki(bool first_move) {
+    krestici_noliki() {
+        int first_move = 0;
+        cout << "First to move?" << endl;
+        cout << "0 - no" << endl;
+        cout << "1 - yes" << endl << endl;
+        cin >> first_move;
+        cout << endl;
+
         this->move_rigth = first_move;
         if (first_move) {
             this->Player = 1;
@@ -279,8 +286,7 @@ private:
 
 int main()
 {
-    krestici_noliki One(false);
-
+    krestici_noliki One;
     One.game();
 
     return 0;
